@@ -6,26 +6,40 @@ import numpy as np
 TEMPLATE_PATH.insert(0,"./views")
 root=os.getcwd()
 
-#----------------------------------------------------------------------
-#DATABASE CONNECTIVITY
-#----------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------
+#                                   DATABASE CONNECTIVITY
+#------------------------------------------------------------------------------------------------
 import pymongo
 
-myclient = pymongo.MongoClient("mongodb://localhost:27017/")
-mydb = myclient["mydatabase"]
-mycol = mydb["customers"]
+client = pymongo.MongoClient("mongodb://localhost:27017/")
+db = client["KerasApp"] #appName
+user= db["user"] #collectionName
 
-#----------------------------------------------------------------------
-#ROUTES
-#----------------------------------------------------------------------
+
+
+
+#------------------------------------------------------------------------------------------------
+#                                          ROUTES
+#------------------------------------------------------------------------------------------------
+
 
 @route('/static/<filepath:path>')
 def serve_static(filepath):
     myroot=os.path.join(root,"static")
     return static_file(filepath,root=myroot)
 
-#----------------------------------------------------------------------
-#SERVER
-#----------------------------------------------------------------------	
-run(host="localhost",port=8997,debug=True)
+@get('/test')
+def test():
+    user.insert({"name":"deepak","age":22})
+    return "Success!!"
 
+
+
+
+#--------------------------------------------------------------------------------------------------
+#                                          SERVER
+#--------------------------------------------------------------------------------------------------	
+
+
+run(host="localhost",port=8997,debug=True)
+#run(host="0.0.0.0",port=int(os.environ.get('PORT',5000)))
